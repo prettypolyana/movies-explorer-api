@@ -11,7 +11,9 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const NotFoundError = require('./errors/NotFoundError');
 
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+const { NODE_ENV, DATABASE } = process.env;
+
+mongoose.connect(`mongodb://${NODE_ENV === 'production' ? DATABASE : 'localhost:27017/bitfilmsdb'}`, {
   useNewUrlParser: true,
 });
 
