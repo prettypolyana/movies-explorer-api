@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
+const helmet = require('helmet');
 
 require('dotenv').config();
 
@@ -10,6 +11,8 @@ const serverErrorHandler = require('./middlewares/serverErrorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const NotFoundError = require('./errors/NotFoundError');
+
+const limiter = require('./utils/rateLimiter');
 
 const { NODE_ENV, DATABASE } = process.env;
 
@@ -21,10 +24,14 @@ const app = express();
 
 const { PORT = 3000 } = process.env;
 
+app.use(limiter);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(requestLogger);
+
+app.use(helmet());
 
 app.use('/', router);
 
