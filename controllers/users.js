@@ -7,6 +7,13 @@ const User = require('../models/user');
 
 const { CREATED_STATUS_CODE } = require('../utils/constants');
 
+const {
+  USER_NOT_FOUND,
+  INCORRECT_USER_DATA,
+  EMAIL_ALREADY_EXIST,
+  EMAIL_AND_PASSWORD_NOT_FOUND,
+} = require('../utils/messages');
+
 const NotFoundError = require('../errors/NotFoundError');
 const ValidationError = require('../errors/ValidationError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
@@ -16,7 +23,7 @@ const getUserInfo = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Пользователь по указанному _id не найден');
+        throw new NotFoundError(USER_NOT_FOUND);
       } else {
         res.send(user);
       }
@@ -34,14 +41,16 @@ const updateUserInfo = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Пользователь по указанному _id не найден');
+        throw new NotFoundError(USER_NOT_FOUND);
       } else {
         res.send(user);
       }
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new ValidationError('Переданы некорректные данные при обновлении профиля'));
+        next(new ValidationError(INCORRECT_USER_DATA));
+      } else if (err.code === 11000) {
+        next(new AlreadyExistError(EMAIL_ALREADY_EXIST));
       } else {
         next(err);
       }
@@ -66,9 +75,9 @@ const createUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new ValidationError('Переданы некорректные данные при создании пользователя'));
+        next(new ValidationError(INCORRECT_USER_DATA));
       } else if (err.code === 11000) {
-        next(new AlreadyExistError('Пользователь с таким email уже зарегистрирован'));
+        next(new AlreadyExistError(EMAIL_AND_PASSWORD_NOT_FOUND));
       } else {
         next(err);
       }
@@ -81,12 +90,12 @@ const login = (req, res, next) => {
   User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        throw new UnauthorizedError('Пользователь с такой парой email - пароль не найден');
+        throw new UnauthorizedError(EMAIL_AND_PASSWORD_NOT_FOUND);
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            throw new UnauthorizedError('Пользователь с такой парой email - пароль не найден');
+            throw new UnauthorizedError(EMAIL_AND_PASSWORD_NOT_FOUND);
           }
           const token = jwt.sign(
             { _id: user._id },

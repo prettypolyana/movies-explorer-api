@@ -4,11 +4,13 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 
 const UnauthorizedError = require('../errors/UnauthorizedError');
 
+const { NEED_AUTH } = require('../utils/messages');
+
 const auth = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    next(new UnauthorizedError('Необходима авторизация'));
+    next(new UnauthorizedError(NEED_AUTH));
     return;
   }
   const token = authorization.replace('Bearer ', '');
@@ -20,7 +22,7 @@ const auth = (req, res, next) => {
       NODE_ENV === 'production' ? JWT_SECRET : 'fc18de59891ccd9727644160e4ba4b6d13326721365ab1dc9a458c009eed3681',
     );
   } catch (err) {
-    next(new UnauthorizedError('Необходима авторизация'));
+    next(new UnauthorizedError(NEED_AUTH));
     return;
   }
 

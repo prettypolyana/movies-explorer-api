@@ -10,13 +10,13 @@ const serverErrorHandler = require('./middlewares/serverErrorHandler');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const NotFoundError = require('./errors/NotFoundError');
-
 const limiter = require('./utils/rateLimiter');
+
+const { DEV_DATABASE_NAME } = require('./config');
 
 const { NODE_ENV, DATABASE } = process.env;
 
-mongoose.connect(`mongodb://${NODE_ENV === 'production' ? DATABASE : 'localhost:27017/bitfilmsdb'}`, {
+mongoose.connect(`mongodb://${NODE_ENV === 'production' ? DATABASE : DEV_DATABASE_NAME}`, {
   useNewUrlParser: true,
 });
 
@@ -24,22 +24,18 @@ const app = express();
 
 const { PORT = 3000 } = process.env;
 
+app.use(requestLogger);
+
+app.use(errorLogger);
+
 app.use(limiter);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(requestLogger);
-
 app.use(helmet());
 
 app.use('/', router);
-
-app.use(errorLogger);
-
-app.use((req, res, next) => {
-  next(new NotFoundError('Адреса не существует'));
-});
 
 app.use(errors());
 app.use(serverErrorHandler);
