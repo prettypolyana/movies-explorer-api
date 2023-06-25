@@ -8,6 +8,7 @@ require('dotenv').config();
 const router = require('./routes/index');
 const serverErrorHandler = require('./middlewares/serverErrorHandler');
 
+const cors = require('./middlewares/cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const limiter = require('./utils/rateLimiter');
@@ -23,6 +24,8 @@ mongoose.connect(`mongodb://${NODE_ENV === 'production' ? DATABASE : DEV_DATABAS
 const app = express();
 
 const { PORT = 3000 } = process.env;
+
+app.use(cors);
 
 app.use(requestLogger);
 
