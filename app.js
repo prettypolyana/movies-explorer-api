@@ -23,7 +23,7 @@ mongoose.connect(`mongodb://${NODE_ENV === 'production' ? DATABASE : DEV_DATABAS
 
 const app = express();
 
-const { PORT = 3000 } = process.env;
+const { PORT = 8080 } = process.env;
 
 app.use(cors);
 

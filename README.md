@@ -1,9 +1,33 @@
-# movies-explorer-api
+# Проект: Movies Explorer 
 
-Backend для сервиса поиска и хранения фильмов. Реализованы возможности регистрации, авторизации, добавления и удаления фильмов. Проект написан с помощью JavaScript.
+[Демо](http://polyana.movies-explorer.nomoredomains.work/)
 
-* Github [https://github.com/prettypolyana/movies-explorer-api](https://github.com/prettypolyana/movies-explorer-api)
+Back-end для сервиса поиска и хранения фильмов. Реализованы возможности регистрации, авторизации, добавления и удаления фильмов. Проект написан с помощью JavaScript.
 
-* IP [158.160.53.230](158.160.53.230)
+Сайт представляет собой сервис для поиска фильмов по запросу с возможностью сохранять их в личном кабинете.
 
-* Backend [https://api.pln.movies-explorer.nomoredomains.work](https://api.pln.movies-explorer.nomoredomains.work)
+``npm run dev`` - сборка для разработки
+
+``npm run build`` - финальная сборка
+
+## Использумеые технологии:
+
+* BEM
+* Flexbox
+* Grid
+* Media-queries
+* Webpack
+
+## Stack:
+
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) 
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+
+![JavaScript](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
+![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge)
+![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
+
+## Ссылки:
+
+[Ссылка на макет](https://disk.yandex.ru/d/G8xiequRIbe6Hg)
